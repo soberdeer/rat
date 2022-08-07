@@ -21,6 +21,7 @@ a {
   }
   body {
     color: white;
-    background: black;
+    background-color: black;
+    transition: color 150ms ease, background-color 150ms ease;
   }
 }

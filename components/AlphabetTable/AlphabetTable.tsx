@@ -4,10 +4,10 @@ import {
   Center,
   Text,
   Stack,
-  Title,
   Collapse,
   Button,
   Container,
+  useMantineColorScheme,
 } from '@mantine/core';
 import { useElementSize } from '@mantine/hooks';
 import charMap from '../../util/charMap';
@@ -29,6 +29,7 @@ export function AlphabetTable({
   ...others
 }: AlphabetTableProps) {
   const { classes, cx } = useStyles();
+  const { colorScheme } = useMantineColorScheme();
   const { ref, width } = useElementSize();
   const [opened, setOpened] = useState<boolean>(false);
   const [chunks, setChunks] = useState<typeof charMap[]>([]);
@@ -48,7 +49,11 @@ export function AlphabetTable({
   return (
     <Container className={cx(classes.root, className)} ref={ref} {...others}>
       <Center>
-        <Button onClick={() => setOpened((o) => !o)}>
+        <Button
+          color={colorScheme === 'dark' ? 'gray' : 'orange'}
+          variant={colorScheme === 'dark' ? 'filled' : 'light'}
+          onClick={() => setOpened((o) => !o)}
+        >
           Алфавит
         </Button>
       </Center>

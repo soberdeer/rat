@@ -1,4 +1,4 @@
-import { DefaultProps, Text, Container, Group, Center, SimpleGrid } from '@mantine/core';
+import { DefaultProps, Text, Container, SimpleGrid } from '@mantine/core';
 import useStyles from './MainPage.styles';
 import { Card } from './Card/Card';
 import images from './images';

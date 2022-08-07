@@ -2,17 +2,14 @@ import {
   DefaultProps,
   Breadcrumbs,
   Anchor,
-  Group,
   Text,
   Container,
-  Button,
   Stack,
   Tooltip,
-  SimpleGrid,
-  Stepper, Textarea, Space,
+  Textarea,
+  Space,
 } from '@mantine/core';
-import chars from '../../util/charMap';
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import Box from '../Box/Box';
 import replaceText, { ResultType } from '../../util/replaceText';
 import useStyles from './ReadPage.styles';
@@ -29,7 +26,7 @@ interface ReadPageProps extends DefaultProps {
 export function ReadPage({
   ...others
 }: ReadPageProps) {
-  const { classes, cx } = useStyles();
+  const { classes } = useStyles();
   const [text, setText] = useState<string>('');
   const [arrText, setArrText] = useState<string[]>([]);
   const [changedText, setChangedText] = useState<ResultType[]>([]);
@@ -42,7 +39,7 @@ export function ReadPage({
 
   return (
     <Container
-      sx={(theme) => ({
+      sx={() => ({
         paddingBottom: 40,
       })}
       {...others}

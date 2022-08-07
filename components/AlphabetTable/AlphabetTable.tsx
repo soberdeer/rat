@@ -40,14 +40,14 @@ export function AlphabetTable({
         charMap
           .filter(char => char.armenian.length === 1)
           .sort((char, char2) => (
-            char.cyrillic > char2.cyrillic ? 1 : -1
+            char.armenian > char2.armenian ? 1 : -1
           )),
-        width < 700 ? (width < 520 ? 20 : 15) : 10));
+        width < 700 ? (width < 520 ? 19 : 15) : 10));
   }, [width]);
 
 
   return (
-    <Container className={cx(classes.root, className)} ref={ref} {...others}>
+    <Container className={cx(classes.root, className)} {...others} ref={ref}>
       <Center>
         <Button
           color={colorScheme === 'dark' ? 'gray' : 'orange'}
@@ -58,9 +58,9 @@ export function AlphabetTable({
         </Button>
       </Center>
 
-      <Collapse in={opened} py={40}>
+      <Collapse in={opened} py={40} ref={ref}>
         <Center>
-          <div className={classes.grid}>
+          <div className={classes.grid} >
             {chunks.map((chunk, index) => (
               <Stack spacing={0} key={index}>
                 {chunk
@@ -72,7 +72,7 @@ export function AlphabetTable({
                             className={classes.char}
                             style={{ textTransform: char.option ? 'none' : 'capitalize' }}
                           >
-                            {`${char.option ? '(В)о' : char.cyrillic}`}
+                            {`${char.option || char.cyrillic}`}
                           </Text>
                         </div>
                         <div className={classes.box}>

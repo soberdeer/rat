@@ -21,6 +21,7 @@ const chars = [
   { cyrillic: 'у', armenian: 'ւ' },
   { cyrillic: 'ф', armenian: 'ֆ' },
   { cyrillic: 'х', armenian: 'խ' },
+  { cyrillic: 'х', armenian: 'հ', latin: 'h', option: 'Х(h)' },
   { cyrillic: 'ц', armenian: 'ց' },
   { cyrillic: 'ч', armenian: 'չ' },
   { cyrillic: 'ш', armenian: 'շ' },
@@ -38,7 +39,7 @@ const chars = [
   { cyrillic: 'пх', armenian: 'փ' },
   { cyrillic: 'кх', armenian: 'ք' },
   { cyrillic: 'ев', armenian: 'և' },
-  { cyrillic: 'о', latin: 'wo', armenian: 'ո', option: 'во' },
+  { cyrillic: 'о', latin: 'wo', armenian: 'ո', option: '(В)о' },
 ];
 
 export const doubleChars = [

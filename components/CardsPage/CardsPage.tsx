@@ -15,6 +15,7 @@ import chars from '../../util/charMap';
 import { useEffect, useMemo, useState } from 'react';
 import Box from '../Box/Box';
 import useStyles from './CardsPage.styles';
+import { AlphabetTable } from '../AlphabetTable/AlphabetTable';
 
 const breadcrumbs = [
   { title: 'Главная', href: '/' },
@@ -101,6 +102,7 @@ export function CardsPage({
             </Group>
           </Stack>
         )}
+        <AlphabetTable pb={40}/>
       </Stack>
     </Container>
   );

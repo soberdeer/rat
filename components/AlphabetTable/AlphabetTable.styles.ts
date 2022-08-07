@@ -1,6 +1,10 @@
 import { createStyles } from '@mantine/core';
 
 export default createStyles((theme) => ({
+  root: {
+    width: '100%',
+  },
+
   grid: {
     display: 'flex',
     flexWrap: 'wrap',

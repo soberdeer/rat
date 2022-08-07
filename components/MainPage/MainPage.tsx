@@ -23,13 +23,13 @@ export function MainPage({
 
   return (
     <Container {...others}>
-      <Text align="center" py={100}>{hero}</Text>
+      <Text align="center" py={40}>{hero}</Text>
+      <AlphabetTable pb={40}/>
       <SimpleGrid cols={2}>
         {cards.map((card, index) => (
           <Card {...card} key={index} />
         ))}
       </SimpleGrid>
-      <AlphabetTable/>
     </Container>
   );
 }

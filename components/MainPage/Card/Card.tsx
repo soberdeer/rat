@@ -1,7 +1,6 @@
 import { DefaultProps, Stack, Title, UnstyledButton } from '@mantine/core';
 import Box from '../../Box/Box';
 import images from '../images';
-import useStyles from './Card.styles';
 import Link from 'next/link';
 
 interface CardProps extends DefaultProps {
@@ -16,7 +15,6 @@ export function Card({
   link,
   ...others
 }: CardProps) {
-  const { classes } = useStyles();
   const Image = images[image];
 
   return (

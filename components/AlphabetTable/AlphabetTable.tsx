@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   DefaultProps,
   Center,
@@ -10,41 +10,18 @@ import {
   useMantineColorScheme,
 } from '@mantine/core';
 import { useElementSize } from '@mantine/hooks';
-import charMap from '../../util/charMap';
+import chunkGenerator from './chunkGenerator';
 import useStyles from './AlphabetTable.styles';
-
-function chunkGenerator(arr: typeof charMap, n: number) {
-  let newChunk = [];
-  for (let i = 0; i < arr.length; i += n) {
-    newChunk.push(arr.slice(i, i + n));
-  }
-  return newChunk;
-}
-
-interface AlphabetTableProps extends DefaultProps {
-}
 
 export function AlphabetTable({
   className,
   ...others
-}: AlphabetTableProps) {
+}: DefaultProps) {
   const { classes, cx } = useStyles();
   const { colorScheme } = useMantineColorScheme();
   const { ref, width } = useElementSize();
   const [opened, setOpened] = useState<boolean>(false);
-  const [chunks, setChunks] = useState<typeof charMap[]>([]);
-
-  useEffect(() => {
-    setChunks(
-      chunkGenerator(
-        charMap
-          .filter(char => char.armenian.length === 1)
-          .sort((char, char2) => (
-            char.armenian > char2.armenian ? 1 : -1
-          )),
-        width < 700 ? (width < 520 ? 19 : 15) : 10));
-  }, [width]);
-
+  const chunks = useMemo(() => (chunkGenerator(width < 700 ? (width < 520 ? 19 : 15) : 10) || []), [width]);
 
   return (
     <Container className={cx(classes.root, className)} {...others} ref={ref}>
@@ -60,7 +37,7 @@ export function AlphabetTable({
 
       <Collapse in={opened} py={40} ref={ref}>
         <Center>
-          <div className={classes.grid} >
+          <div className={classes.grid}>
             {chunks.map((chunk, index) => (
               <Stack spacing={0} key={index}>
                 {chunk

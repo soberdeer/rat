@@ -7,44 +7,27 @@ import {
   Container,
   Button,
   Stack,
-  Title,
-  SimpleGrid,
   Stepper,
+  Center,
 } from '@mantine/core';
-import chars from '../../util/charMap';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Box from '../Box/Box';
-import useStyles from './CardsPage.styles';
 import { AlphabetTable } from '../AlphabetTable/AlphabetTable';
+import shuffleArray from './shuffleArray';
+import useStyles from './CardsPage.styles';
 
 const breadcrumbs = [
   { title: 'Главная', href: '/' },
   { title: 'Карточки', href: '/cards' },
 ];
 
-interface CardsPageProps extends DefaultProps {
-}
-
-function shuffleArray() {
-  const array = [...chars];
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array.filter(chars => chars.armenian.length === 1) as typeof chars;
-}
-
-export function CardsPage({
+export default function CardsPage({
   ...others
-}: CardsPageProps) {
+}: DefaultProps) {
   const { classes, cx } = useStyles();
-  const [charArr, setCharArr] = useState<typeof chars>([]);
+  const charArr = useMemo(() => shuffleArray(), []);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
-
-  useEffect(() => {
-    setCharArr(shuffleArray);
-  }, []);
 
   return (
     <Container {...others}>
@@ -56,12 +39,14 @@ export function CardsPage({
         ))}
       </Breadcrumbs>
       <Stack spacing={40}>
-        <Stepper active={currentIndex} classNames={{
+        <Stepper
+          active={currentIndex} classNames={{
           stepBody: classes.stepBody,
           stepIcon: classes.stepIcon,
           separator: classes.separator,
           stepCompletedIcon: classes.stepCompletedIcon,
-        }}>
+        }}
+        >
           {charArr.map((_, index) => (
             <Stepper.Step />
           ))}
@@ -85,24 +70,26 @@ export function CardsPage({
                   {showAnswer && charArr[currentIndex]?.latin && (
                     <Text>{`(англ: ${charArr[currentIndex]?.latin})`}</Text>
                   )}
-                  <Button
-                    className={classes.next}
-                    color={showAnswer ? 'green' : 'blue'}
-                    onClick={() => {
-                      if (showAnswer) {
-                        setCurrentIndex(currentIndex === charArr.length - 1 ? 0 : currentIndex + 1);
-                      }
-                      setShowAnswer(!showAnswer);
-                    }}
-                  >
-                    {showAnswer ? 'Дальше' : 'Показать'}
-                  </Button>
                 </Group>
               </Box>
             </Group>
+            <Center>
+              <Button
+              className={classes.next}
+              color={showAnswer ? 'green' : 'blue'}
+              onClick={() => {
+                if (showAnswer) {
+                  setCurrentIndex(currentIndex === charArr.length - 1 ? 0 : currentIndex + 1);
+                }
+                setShowAnswer(!showAnswer);
+              }}
+            >
+              {showAnswer ? 'Дальше' : 'Показать'}
+            </Button>
+            </Center>
           </Stack>
         )}
-        <AlphabetTable pb={40}/>
+        <AlphabetTable pb={40} />
       </Stack>
     </Container>
   );

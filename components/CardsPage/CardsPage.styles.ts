@@ -22,7 +22,7 @@ export default createStyles((theme) => ({
     maxWidth: 300,
 
     [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
-      maxWidth: '100%',
+      height: 200,
     },
   },
 
@@ -35,10 +35,17 @@ export default createStyles((theme) => ({
 
   rightCard: {
     justifyContent: 'space-between',
+
+    flexWrap: 'nowrap',
   },
 
   cardText: {
     fontSize: 120,
+
+    [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+      height: 200,
+      fontSize: 60,
+    },
   },
 
   answer: {
@@ -55,6 +62,12 @@ export default createStyles((theme) => ({
     paddingTop: 117,
     fontSize: 100,
     textTransform: 'capitalize',
+
+    [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+      paddingTop: 20,
+      fontSize: 60,
+      lineHeight: '60px',
+    },
   },
 
   next: {
@@ -70,6 +83,12 @@ export default createStyles((theme) => ({
     height: 10,
     minWidth: 10,
     fontSize: 0,
+
+    [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+      borderRadius: 2,
+      width: 2,
+      minWidth: 2,
+    },
   },
 
   stepCompletedIcon: {

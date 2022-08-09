@@ -1,10 +1,12 @@
 import { BoxProps as MantineBoxProps, Box as MantineBox } from '@mantine/core';
 
 interface BoxProps extends MantineBoxProps {
+  clickable?: boolean
 }
 
 export default function Box({
   children,
+  clickable,
   ...others
 }: BoxProps) {
   return (
@@ -15,12 +17,14 @@ export default function Box({
         textAlign: 'center',
         padding: theme.spacing.xl,
         borderRadius: theme.radius.md,
-        cursor: 'pointer',
+        cursor: clickable ? 'pointer' : 'default',
 
-        '&:hover': {
-          backgroundColor:
-            theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1],
-        },
+        ...(clickable ? {
+          '&:hover': {
+            backgroundColor:
+              theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1],
+          },
+        } : {}),
       })}
       {...others}
     >

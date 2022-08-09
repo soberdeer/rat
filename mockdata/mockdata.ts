@@ -8,6 +8,10 @@ const mockdata = {
         label: 'Карточки',
       },
       {
+        href: '/test',
+        label: 'Тест',
+      },
+      {
         href: '/reading',
         label: 'Чтение',
       },
@@ -23,12 +27,26 @@ const mockdata = {
         link: '/cards',
       },
       {
-        image: 'reading'  as keyof typeof images,
+        image: 'test' as keyof typeof images,
+        title: 'Тест',
+        link: '/test',
+      },
+      {
+        image: 'reading' as keyof typeof images,
         title: 'Чтение',
         link: '/reading',
       },
     ],
   },
+  test: {
+    results: {
+      bad: 'К сожалению, ваше знание алфавита оставляет желать лучшего. Больше тренеруйтесь, и вы обязательно его выучите',
+      neutral: 'Неплохой результат! Но ошибки все еще есть - стоит повторить алфавит еще несколько раз',
+      good: 'Поздравляю! Теперь можно сказать, что вы выучили алфавит!'
+    },
+    next: 'Дальше',
+    show_mistakes: 'Показать ошибки',
+  }
 };
 
 export default mockdata;

@@ -20,6 +20,7 @@ export default createStyles((theme) => ({
     height: 400,
     flexBasis: 200,
     maxWidth: 300,
+    cursor: 'default !important',
 
     [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
       height: 200,
@@ -68,10 +69,6 @@ export default createStyles((theme) => ({
       fontSize: 60,
       lineHeight: '60px',
     },
-  },
-
-  next: {
-    width: '100%',
   },
 
   stepBody: {

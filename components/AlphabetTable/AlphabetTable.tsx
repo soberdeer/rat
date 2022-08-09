@@ -35,7 +35,7 @@ export function AlphabetTable({
         </Button>
       </Center>
 
-      <Collapse in={opened} py={40} ref={ref}>
+      <Collapse in={opened} py={40}>
         <Center>
           <div className={classes.grid}>
             {chunks.map((chunk, index) => (

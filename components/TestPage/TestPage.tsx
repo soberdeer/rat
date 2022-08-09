@@ -10,27 +10,11 @@ import CardsWrapper from '../CardsWrapper/CardsWrapper';
 import getAnswers from './getAnswers';
 import { CharType } from '../../util/charType';
 import Result from './Result/Result';
-import charMap from '../../util/charMap';
 
 const breadcrumbs = [
   { title: 'Главная', href: '/' },
   { title: 'Тест', href: '/test' },
 ];
-
-
-const mapMock = () => (
-  charMap
-    .filter(chars => chars.armenian.length === 1)
-    .map((item, index) => {
-      if (index < 35) {
-        return true;
-      }
-      // if (index < 25) {
-      //   return false;
-      // }
-      return null;
-    })
-);
 
 export default function TestPage({
   labels,
@@ -90,6 +74,7 @@ export default function TestPage({
               setShowResult(true) :
               setCurrentIndex(currentIndex + 1)
           )}
+          disabled={!answeredValues[currentIndex]}
         >
           Дальше
         </Button>

@@ -3,13 +3,15 @@ import {
   Anchor,
   Breadcrumbs,
   Button,
-  Center, Container,
+  Center,
+  Container,
   DefaultProps,
   Text,
   RingProgress,
   Stack,
   Collapse,
   Radio,
+  Group,
 } from '@mantine/core';
 import { CharType } from '../../../util/charType';
 import Box from '../../Box/Box';
@@ -33,12 +35,16 @@ export default function Result({
   answeredValues, //radio value
   ...others
 }: ResultProps) {
-  const trueValues = useMemo(() => Math.floor(answers.filter(item => item).length / (answers.length / 100)), []);
-  const color = useMemo(() => (trueValues > 90 ? 'green' : trueValues > 60 ? 'yellow' : 'red'), [trueValues]);
+  const trueValues = useMemo(() => (
+    Math.floor(answers.filter(item => item).length / (answers.length / 100))
+  ), []);
+  const color = useMemo(() => (
+    trueValues > 90 ? 'green' : trueValues > 60 ? 'yellow' : 'red'
+  ), [trueValues]);
   const [showMistakes, setShowMistakes] = useState(false);
   const radioItems = useMemo(() => answers
     .map((item, index) => ({ item, index }))
-    .filter(item => item.item)
+    .filter(item => !item.item)
     .map(item => ({
       variants: variants[item.index],
       answered: answeredValues[item.index],
@@ -76,7 +82,9 @@ export default function Result({
         </Center>
         <Container size="sm">
           <Text align="center">
-            {trueValues > 90 ? labels.results.good : trueValues > 60 ? labels.results.neutral : labels.results.bad}
+            {trueValues > 90 ?
+              labels.results.good :
+              trueValues > 60 ? labels.results.neutral : labels.results.bad}
           </Text>
         </Container>
         <Center>
@@ -88,27 +96,43 @@ export default function Result({
         </Center>
 
         <Collapse in={showMistakes} py={40}>
-          <Stack>
-            {radioItems.map((item, index) => (
-              <Center key={index}>
-                <Box>
-                  <Text>
-                    {}
-                  </Text>
-                </Box>
-                <Radio.Group value={item.correct.option || item.correct.cyrillic}>
-                  {item.variants.map((variant, j) => (
-                    //TODO: add wrong answer
-                    <Radio
-                      sx={() => ({ textTransform: 'capitalize' })}
-                      value={variant.option || variant.cyrillic}
-                      label={variant.option || variant.cyrillic}
-                    />
-                  ))}
-                </Radio.Group>
-              </Center>
-            ))}
-          </Stack>
+          <Center>
+            <Stack>
+              {radioItems.map((item, index) => (
+                <Group key={index}>
+                  <Box style={{ padding: '10px 0', width: 60 }}>
+                    <Text sx={() => ({ fontSize: 20 })}>
+                      {item.correct.armenian.toUpperCase()}
+                      {item.correct.armenian}
+                    </Text>
+                  </Box>
+                  <Group spacing={20}>
+                    {item.variants.map((variant, j) => {
+                      const wrong = (
+                        (variant.option || variant.cyrillic) === (item.answered.option || item.answered.cyrillic)
+                      );
+                      const correct = (
+                        (variant.option || variant.cyrillic) === (item.correct.option || item.correct.cyrillic)
+                      );
+                      return (
+                        <Radio
+                          key={j}
+                          color={wrong ? 'red' : 'green'}
+                          checked={wrong || correct}
+                          sx={() => ({
+                            textTransform: variant.option ? 'none' : 'capitalize',
+                            minWidth: 60,
+                          })}
+                          value={variant.option || variant.cyrillic}
+                          label={variant.option || variant.cyrillic}
+                        />
+                      );
+                    })}
+                  </Group>
+                </Group>
+              ))}
+            </Stack>
+          </Center>
         </Collapse>
       </Stack>
     </Container>

@@ -20,7 +20,7 @@ export default function TestPage({
   labels,
   ...others
 }: DefaultProps & { labels: Record<string, any> }) {
-  const charArr = useMemo(() => shuffleArray(), []);
+  const charArr = useMemo<CharType[]>(() => shuffleArray(), []);
   const variants = useMemo<CharType[][]>(() => charArr.map(char => getAnswers(char)), []);
   const [answers, setAnswers] = useState<(boolean | null)[]>(charArr.map(_ => null));
   const [answeredValues, setAnsweredValues] = useState<CharType[]>([]);
@@ -29,7 +29,7 @@ export default function TestPage({
 
   function updateAnswers(value: string) {
     const clone = [...answers];
-    clone[currentIndex] = value === (charArr[currentIndex].option || charArr[currentIndex].cyrillic);
+    clone[currentIndex] = value === ((charArr[currentIndex]?.option) || charArr[currentIndex].cyrillic);
     setAnsweredValues([...answeredValues,
       variants[currentIndex]
         .find(item => item.option ? value === item.option : value === item.cyrillic) as CharType,
@@ -53,11 +53,13 @@ export default function TestPage({
       currentIndex={currentIndex}
       {...others}
     >
-      <Radio.Group onChange={(value) => updateAnswers(value)}>
+      <Radio.Group
+        onChange={(value) => updateAnswers(value)}
+      >
         {variants[currentIndex].map((answer, index) => (
           <Radio
             sx={() => ({
-              textTransform: 'capitalize',
+              textTransform: answer.option ? 'none' : 'capitalize',
             })}
             key={index}
             value={answer.option || answer.cyrillic}

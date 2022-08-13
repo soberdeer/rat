@@ -20,7 +20,7 @@ export function Card({
   const isMobile = useMediaQuery('(max-width: 900px)');
 
   return (
-    <Link href={link} passHref>
+    <Link href={link} passHref as={`${process.env.BACKEND_URL}${link}`}>
       <UnstyledButton component="a" {...others}>
         <Box clickable>
           <Stack align="center">

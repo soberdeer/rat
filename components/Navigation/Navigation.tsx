@@ -39,7 +39,7 @@ export function Navigation({
           </Link>
           <Group spacing="md" align="center">
             {links.map((link, index) => (
-              <Link href={link.href} as={`${process.env.BACKEND_URL}${link.href}`} passHref key={index}>
+              <Link href={link.href} passHref key={index}>
                 <Button
                   component="a"
                   color={colorScheme === 'dark' ? 'gray' : 'orange'}

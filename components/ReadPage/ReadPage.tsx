@@ -1,7 +1,5 @@
 import {
   DefaultProps,
-  Breadcrumbs,
-  Anchor,
   Text,
   Container,
   Stack,
@@ -11,6 +9,7 @@ import {
 } from '@mantine/core';
 import { useState } from 'react';
 import Box from '../Box/Box';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import replaceText, { ResultType } from '../../util/replaceText';
 import useStyles from './ReadPage.styles';
 
@@ -44,13 +43,7 @@ export function ReadPage({
       })}
       {...others}
     >
-      <Breadcrumbs py={40}>{
-        breadcrumbs.map((item, index) => (
-          <Anchor href={item.href} key={index}>
-            {item.title}
-          </Anchor>
-        ))}
-      </Breadcrumbs>
+      <Breadcrumbs breadcrumbs={breadcrumbs} />
       <Stack spacing={40}>
         <Box>
           <Textarea

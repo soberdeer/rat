@@ -1,13 +1,12 @@
 import {
   DefaultProps,
-  Breadcrumbs,
-  Anchor,
   Group,
   Text,
   Container,
   Stack,
   Stepper,
 } from '@mantine/core';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import Box from '../Box/Box';
 import { AlphabetTable } from '../AlphabetTable/AlphabetTable';
 import { CharType } from '../../util/charType';
@@ -39,13 +38,7 @@ export default function CardsWrapper({
 
   return (
     <Container {...others}>
-      <Breadcrumbs py={40}>{
-        breadcrumbs.map((item, index) => (
-          <Anchor href={item.href} key={index}>
-            {item.title}
-          </Anchor>
-        ))}
-      </Breadcrumbs>
+      <Breadcrumbs breadcrumbs={breadcrumbs} />
       <Stack spacing={40}>
         <Stepper
           active={currentIndex}

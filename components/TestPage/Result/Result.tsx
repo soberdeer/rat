@@ -22,7 +22,7 @@ interface ResultProps extends DefaultProps {
   charArr: CharType[],
   labels: Record<string, any>,
   variants: CharType[][],
-  answeredValues: CharType[],
+  answeredValues: (CharType | null)[],
 }
 
 
@@ -35,10 +35,10 @@ export default function Result({
   answeredValues, //radio value
   ...others
 }: ResultProps) {
-  const trueValues = useMemo(() => (
+  const trueValues = useMemo<number>(() => (
     Math.floor(answers.filter(item => item).length / (answers.length / 100))
   ), []);
-  const color = useMemo(() => (
+  const color = useMemo<string>(() => (
     trueValues > 90 ? 'green' : trueValues > 60 ? 'yellow' : 'red'
   ), [trueValues]);
   const [showMistakes, setShowMistakes] = useState(false);
@@ -87,49 +87,54 @@ export default function Result({
               trueValues > 60 ? labels.results.neutral : labels.results.bad}
           </Text>
         </Container>
-        <Center>
-          <Button
-            onClick={() => setShowMistakes(o => !o)}
-          >
-            {labels.show_mistakes}
-          </Button>
-        </Center>
+        {trueValues !== 100 && (
+          <Center>
+            <Button
+              onClick={() => setShowMistakes(o => !o)}
+            >
+              {labels.show_mistakes}
+            </Button>
+          </Center>
+        )}
 
         <Collapse in={showMistakes} py={40}>
           <Center>
             <Stack>
               {radioItems.map((item, index) => (
-                <Group key={index}>
-                  <Box style={{ padding: '10px 0', width: 60 }}>
-                    <Text sx={() => ({ fontSize: 20 })}>
-                      {item.correct.armenian.toUpperCase()}
-                      {item.correct.armenian}
-                    </Text>
-                  </Box>
-                  <Group spacing={20}>
-                    {item.variants.map((variant, j) => {
-                      const wrong = (
-                        (variant.option || variant.cyrillic) === (item.answered.option || item.answered.cyrillic)
-                      );
-                      const correct = (
-                        (variant.option || variant.cyrillic) === (item.correct.option || item.correct.cyrillic)
-                      );
-                      return (
-                        <Radio
-                          key={j}
-                          color={wrong ? 'red' : 'green'}
-                          checked={wrong || correct}
-                          sx={() => ({
-                            textTransform: variant.option ? 'none' : 'capitalize',
-                            minWidth: 60,
-                          })}
-                          value={variant.option || variant.cyrillic}
-                          label={variant.option || variant.cyrillic}
-                        />
-                      );
-                    })}
+                item.correct ? (
+                  <Group key={index}>
+                    <Box style={{ padding: '10px 0', width: 60 }}>
+                      <Text sx={() => ({ fontSize: 20 })}>
+                        {item.correct.armenian.toUpperCase()}
+                        {item.correct.armenian}
+                      </Text>
+                    </Box>
+                    <Group spacing={20}>
+                      {item.variants.map((variant, j) => {
+                        const wrong = (
+                          (variant.option || variant.cyrillic) === (item.answered?.option || item.answered?.cyrillic)
+                        );
+                        const correct = (
+                          (variant.option || variant.cyrillic) === (item.correct.option || item.correct.cyrillic)
+                        );
+                        return (
+                          <Radio
+                            key={j}
+                            color={wrong ? 'red' : 'green'}
+                            checked={wrong || correct}
+                            sx={() => ({
+                              textTransform: variant.option ? 'none' : 'capitalize',
+                              minWidth: 60,
+                              opacity: !correct ? 0.5 : 1,
+                            })}
+                            value={variant.option || variant.cyrillic}
+                            label={variant.option || variant.cyrillic}
+                          />
+                        );
+                      })}
+                    </Group>
                   </Group>
-                </Group>
+                ) : null
               ))}
             </Stack>
           </Center>

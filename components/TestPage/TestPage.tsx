@@ -4,7 +4,7 @@ import {
   DefaultProps,
   Radio,
 } from '@mantine/core';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import shuffleArray from '../../util/shuffleChars';
 import CardsWrapper from '../CardsWrapper/CardsWrapper';
 import getAnswers from './getAnswers';
@@ -23,19 +23,27 @@ export default function TestPage({
   const charArr = useMemo<CharType[]>(() => shuffleArray(), []);
   const variants = useMemo<CharType[][]>(() => charArr.map(char => getAnswers(char)), []);
   const [answers, setAnswers] = useState<(boolean | null)[]>(charArr.map(_ => null));
-  const [answeredValues, setAnsweredValues] = useState<CharType[]>([]);
+  const [answeredValues, setAnsweredValues] = useState<(CharType | null)[]>(charArr.map(_ => null));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showResult, setShowResult] = useState(false);
 
   function updateAnswers(value: string) {
     const clone = [...answers];
     clone[currentIndex] = value === ((charArr[currentIndex]?.option) || charArr[currentIndex].cyrillic);
-    setAnsweredValues([...answeredValues,
-      variants[currentIndex]
-        .find(item => item.option ? value === item.option : value === item.cyrillic) as CharType,
-    ]);
+    const answeredClone = [...answeredValues];
+    answeredClone[currentIndex] = variants[currentIndex]
+      .find(item => item.option ? value === item.option : value === item.cyrillic) as CharType;
+    setAnsweredValues(answeredClone);
     setAnswers(clone);
   }
+
+  useEffect(() => {
+    return () => {
+      setAnswers(charArr.map(_ => null));
+      setAnsweredValues(charArr.map(_ => null));
+      setCurrentIndex(0)
+    }
+  }, [])
 
   return showResult ? (
     <Result
@@ -54,6 +62,7 @@ export default function TestPage({
       {...others}
     >
       <Radio.Group
+        value={answeredValues[currentIndex]?.option || answeredValues[currentIndex]?.cyrillic || ''}
         onChange={(value) => updateAnswers(value)}
       >
         {variants[currentIndex].map((answer, index) => (

@@ -16,20 +16,28 @@ import {
 import { CharType } from '../../../util/charType';
 import Box from '../../Box/Box';
 
+export type ResultsType = {
+  bad: string,
+  neutral: string,
+  good: string,
+};
+
 interface ResultProps extends DefaultProps {
   breadcrumbs: { title: string, href: string }[],
   answers: (boolean | null)[],
   charArr: CharType[],
-  labels: Record<string, any>,
   variants: CharType[][],
   answeredValues: (CharType | null)[],
+  resultsLabels: ResultsType,
+  showMistakesLabel: string,
 }
 
 
 export default function Result({
   breadcrumbs,
+  showMistakesLabel,
+  resultsLabels,
   answers, // bool answers
-  labels,
   variants, // radio chars
   charArr, // initial chars
   answeredValues, //radio value
@@ -83,8 +91,8 @@ export default function Result({
         <Container size="sm">
           <Text align="center">
             {trueValues > 90 ?
-              labels.results.good :
-              trueValues > 60 ? labels.results.neutral : labels.results.bad}
+              resultsLabels.good :
+              trueValues > 60 ? resultsLabels.neutral : resultsLabels.bad}
           </Text>
         </Container>
         {trueValues !== 100 && (
@@ -92,7 +100,7 @@ export default function Result({
             <Button
               onClick={() => setShowMistakes(o => !o)}
             >
-              {labels.show_mistakes}
+              {showMistakesLabel}
             </Button>
           </Center>
         )}

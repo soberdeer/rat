@@ -1,14 +1,20 @@
 import { useState } from 'react';
-import { AppProps } from 'next/app';
+import { AppProps as AppDefaultProps } from 'next/app';
 import Head from 'next/head';
 import { MantineProvider, ColorSchemeProvider, ColorScheme } from '@mantine/core';
 import { useColorScheme, useHotkeys } from '@mantine/hooks';
-import mockdata from '../mockdata/mockdata';
+import mockdata from '../mockdata';
 import { getCookie, setCookie } from 'cookies-next';
 import { Navigation } from '../components/Navigation/Navigation';
 import { GetServerSidePropsContext } from 'next';
 
-export default function App(props: AppProps & { colorScheme: ColorScheme }) {
+interface AppProps extends AppDefaultProps {
+  colorScheme: ColorScheme,
+  locale?: keyof typeof mockdata,
+  locales?: (keyof typeof mockdata)[],
+}
+
+export default function App(props: AppProps) {
   const { Component, pageProps } = props;
   const preferredColorScheme = useColorScheme();
   const [theme, setTheme] = useState<ColorScheme>(props.colorScheme || preferredColorScheme || 'dark');
@@ -25,7 +31,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   return (
     <>
       <Head>
-        <title>Page title</title>
+        <title>RAT - Russian-Armenian transcription</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
 
@@ -37,8 +43,12 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
             colorScheme: theme,
           }}
         >
-          <Navigation {...mockdata.navigation} />
-          <Component {...pageProps} />
+          <Navigation
+            {...mockdata[props.locale || 'ru'].navigation}
+            locale={props.locale || 'ru'}
+            locales={props.locales}
+          />
+          <Component {...pageProps} locale={props.locale}/>
         </MantineProvider>
       </ColorSchemeProvider>
     </>
@@ -47,6 +57,8 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 
 
 App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
+  locale: ctx.locale || ctx.defaultLocale,
+  locales: ctx.locales || ['en', 'ru'],
   colorScheme: getCookie('mantine-color-scheme', ctx) || 'light',
 });
 

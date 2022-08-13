@@ -10,17 +10,19 @@ interface MainPageProps extends DefaultProps {
     title: string,
     link: string,
   }[],
+  alphabet: string,
 }
 
 export function MainPage({
   hero,
   cards,
+  alphabet,
   ...others
 }: MainPageProps) {
   return (
     <Container {...others}>
       <Text align="center" py={40}>{hero}</Text>
-      <AlphabetTable pb={40}/>
+      <AlphabetTable pb={40} label={alphabet}/>
       <SimpleGrid cols={2}>
         {cards.map((card, index) => (
           <Card {...card} key={index} />

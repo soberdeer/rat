@@ -9,17 +9,28 @@ import shuffleArray from '../../util/shuffleChars';
 import CardsWrapper from '../CardsWrapper/CardsWrapper';
 import getAnswers from './getAnswers';
 import { CharType } from '../../util/charType';
-import Result from './Result/Result';
+import Result, { ResultsType } from './Result/Result';
+import { Breadcrumb } from '../Breadcrumbs/Breadcrumbs';
+import mockdata from '../../mockdata';
 
-const breadcrumbs = [
-  { title: 'Главная', href: '/' },
-  { title: 'Тест', href: '/test' },
-];
+interface TestPageProps extends DefaultProps {
+  results: ResultsType,
+  next: string,
+  show_mistakes: string,
+  breadcrumbs: Breadcrumb[],
+  alphabet: string,
+  locale: keyof typeof mockdata;
+}
 
 export default function TestPage({
-  labels,
+  results,
+  next,
+  show_mistakes,
+  breadcrumbs,
+  alphabet,
+  locale,
   ...others
-}: DefaultProps & { labels: Record<string, any> }) {
+}: TestPageProps) {
   const charArr = useMemo<CharType[]>(() => shuffleArray(), []);
   const variants = useMemo<CharType[][]>(() => charArr.map(char => getAnswers(char)), []);
   const [answers, setAnswers] = useState<(boolean | null)[]>(charArr.map(_ => null));
@@ -50,7 +61,8 @@ export default function TestPage({
       answers={answers}
       breadcrumbs={breadcrumbs}
       charArr={charArr}
-      labels={labels}
+      resultsLabels={results}
+      showMistakesLabel={show_mistakes}
       variants={variants}
       answeredValues={answeredValues}
     />
@@ -59,6 +71,7 @@ export default function TestPage({
       breadcrumbs={breadcrumbs}
       charsArray={charArr}
       currentIndex={currentIndex}
+      alphabet={alphabet}
       {...others}
     >
       <Radio.Group
@@ -87,7 +100,7 @@ export default function TestPage({
           )}
           disabled={!answeredValues[currentIndex]}
         >
-          Дальше
+          {next}
         </Button>
       </Center>
     </CardsWrapper>

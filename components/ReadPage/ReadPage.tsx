@@ -9,20 +9,26 @@ import {
 } from '@mantine/core';
 import { useState } from 'react';
 import Box from '../Box/Box';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import Breadcrumbs, { Breadcrumb } from '../Breadcrumbs/Breadcrumbs';
 import replaceText, { ResultType } from '../../util/replaceText';
 import useStyles from './ReadPage.styles';
-
-const breadcrumbs = [
-  { title: 'Главная', href: '/' },
-  { title: 'Чтение', href: '/reading' },
-];
+import { AlphabetTable } from '../AlphabetTable/AlphabetTable';
 
 interface ReadPageProps extends DefaultProps {
+  hero: string,
+  textarea_placeholder: string,
+  textarea_title: string,
+  breadcrumbs: Breadcrumb[],
+  alphabet: string,
 }
 
 
 export function ReadPage({
+  hero,
+  textarea_placeholder,
+  textarea_title,
+  breadcrumbs,
+  alphabet,
   ...others
 }: ReadPageProps) {
   const { classes } = useStyles();
@@ -44,11 +50,13 @@ export function ReadPage({
       {...others}
     >
       <Breadcrumbs breadcrumbs={breadcrumbs} />
+      <Text align="center" pb={40}>{hero}</Text>
+      <AlphabetTable label={alphabet} />
       <Stack spacing={40}>
         <Box>
           <Textarea
-            placeholder="Вставьте текст сюда"
-            label="Русский текст"
+            placeholder={textarea_placeholder}
+            label={textarea_title}
             value={text}
             onChange={changeText}
             autosize

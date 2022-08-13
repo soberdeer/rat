@@ -1,9 +1,8 @@
-import type { NextPage } from 'next';
-import { MainPage } from '../components/MainPage/MainPage';
 import { ReadPage } from '../components/ReadPage/ReadPage';
+import mockdata from '../mockdata';
 
-const Reading: NextPage = () => {
-  return <ReadPage />;
+const Reading = ({ locale }: { locale: keyof typeof mockdata}) => {
+  return <ReadPage {...mockdata[locale || 'ru'].read}/>;
 };
 
 export default Reading;

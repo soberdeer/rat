@@ -1,9 +1,8 @@
-import type { NextPage } from 'next';
 import { MainPage } from '../components/MainPage/MainPage';
-import mockdata from '../mockdata/mockdata';
+import mockdata from '../mockdata';
 
-const Home: NextPage = () => {
-  return <MainPage {...mockdata.main}/>;
+const Home = ({ locale }: { locale: keyof typeof mockdata}) => {
+  return <MainPage {...mockdata[locale || 'ru'].main}/>;
 };
 
 export default Home;

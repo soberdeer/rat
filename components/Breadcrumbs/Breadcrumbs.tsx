@@ -6,7 +6,7 @@ import {
 import { NextLink } from '@mantine/next';
 
 
-type Breadcrumb = { title: string, href: string };
+export type Breadcrumb = { title: string, href: string };
 
 interface Breadcrumbs extends DefaultProps {
   breadcrumbs: Breadcrumb[],

@@ -1,19 +1,29 @@
 import {
-  Button, Center,
+  Button,
+  Center,
   DefaultProps,
 } from '@mantine/core';
 import { useMemo, useState } from 'react';
 import shuffleArray from '../../util/shuffleChars';
 import CardsWrapper from '../CardsWrapper/CardsWrapper';
+import { Breadcrumb } from '../Breadcrumbs/Breadcrumbs';
 
-const breadcrumbs = [
-  { title: 'Главная', href: '/' },
-  { title: 'Карточки', href: '/cards' },
-];
+interface CardsPageProps extends DefaultProps {
+  locale: 'en' | 'ru',
+  breadcrumbs: Breadcrumb[],
+  alphabet: string,
+  next: string,
+  show: string,
+}
 
 export default function CardsPage({
+  locale,
+  breadcrumbs,
+  alphabet,
+  next,
+  show,
   ...others
-}: DefaultProps) {
+}: CardsPageProps) {
   const charArr = useMemo(() => shuffleArray(), []);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
@@ -25,6 +35,7 @@ export default function CardsPage({
       showAnswer={showAnswer}
       currentIndex={currentIndex}
       withCyrillic
+      alphabet={alphabet}
       {...others}
     >
       <Center>
@@ -38,7 +49,7 @@ export default function CardsPage({
             setShowAnswer(!showAnswer);
           }}
         >
-          {showAnswer ? 'Дальше' : 'Показать'}
+          {showAnswer ? next : show}
         </Button>
       </Center>
     </CardsWrapper>

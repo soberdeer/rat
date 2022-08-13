@@ -1,11 +1,11 @@
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
-import labels from '../mockdata/mockdata';
+import mockdata from '../mockdata';
 
 const TestPage = dynamic(() => import('../components/TestPage/TestPage'), { ssr: false });
 
-const Test: NextPage = () => {
-  return <TestPage labels={labels.test} />;
+const Test = ({ locale = 'ru'}: { locale: keyof typeof mockdata}) => {
+  return <TestPage {...mockdata[locale].test} locale={locale} />;
 };
 
 export default Test;

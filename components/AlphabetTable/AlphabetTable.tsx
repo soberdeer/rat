@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   DefaultProps,
   Center,
@@ -15,8 +15,9 @@ import useStyles from './AlphabetTable.styles';
 
 export function AlphabetTable({
   className,
+  label,
   ...others
-}: DefaultProps) {
+}: DefaultProps & { label: string }) {
   const { classes, cx } = useStyles();
   const { colorScheme } = useMantineColorScheme();
   const { ref, width } = useElementSize();
@@ -31,7 +32,7 @@ export function AlphabetTable({
           variant={colorScheme === 'dark' ? 'filled' : 'light'}
           onClick={() => setOpened((o) => !o)}
         >
-          Алфавит
+          {label}
         </Button>
       </Center>
 

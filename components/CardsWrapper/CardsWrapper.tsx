@@ -21,6 +21,7 @@ interface CardsWrapperInterface extends DefaultProps {
   showAnswer?: boolean,
   children?: React.ReactNode | React.ReactNode[]
   stepperColors?: ('blue' | 'green' | 'red')[],
+  alphabet: string,
 }
 
 export default function CardsWrapper({
@@ -32,6 +33,7 @@ export default function CardsWrapper({
   children,
   showAnswer,
   stepperColors,
+  alphabet,
   ...others
 }: CardsWrapperInterface) {
   const { classes, cx } = useStyles();
@@ -83,7 +85,7 @@ export default function CardsWrapper({
             {children}
           </Stack>
         )}
-        <AlphabetTable pb={40} />
+        <AlphabetTable pb={40} label={alphabet}/>
       </Stack>
     </Container>
   );

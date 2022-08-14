@@ -71,7 +71,8 @@ const mockdataRu = {
     breadcrumbs: [
       { title: 'Главная', href: '/' },
       { title: 'Карточки', href: '/cards' },
-    ]
+    ],
+    secondary_char: '(англ: %char%)',
   },
 };
 

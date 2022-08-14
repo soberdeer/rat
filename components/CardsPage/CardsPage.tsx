@@ -7,9 +7,9 @@ import { useMemo, useState } from 'react';
 import shuffleArray from '../../util/shuffleChars';
 import CardsWrapper from '../CardsWrapper/CardsWrapper';
 import { Breadcrumb } from '../Breadcrumbs/Breadcrumbs';
+import LocaleContext from '../LocaleContext';
 
 interface CardsPageProps extends DefaultProps {
-  locale: 'en' | 'ru',
   breadcrumbs: Breadcrumb[],
   alphabet: string,
   next: string,
@@ -17,7 +17,6 @@ interface CardsPageProps extends DefaultProps {
 }
 
 export default function CardsPage({
-  locale,
   breadcrumbs,
   alphabet,
   next,

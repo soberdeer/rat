@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import {
   Anchor,
   Breadcrumbs,
@@ -15,6 +15,7 @@ import {
 } from '@mantine/core';
 import { CharType } from '../../../util/charType';
 import Box from '../../Box/Box';
+import LocaleContext from '../../LocaleContext';
 
 export type ResultsType = {
   bad: string,
@@ -43,6 +44,9 @@ export default function Result({
   answeredValues, //radio value
   ...others
 }: ResultProps) {
+  const { locale } = useContext(LocaleContext);
+  const mainKey = useMemo<keyof CharType>(() => locale === 'ru' ? 'cyrillic' : 'latin', [locale])
+  const secondaryKey = useMemo<keyof CharType>(() => locale === 'ru' ? 'option' : 'latin_option', [locale])
   const trueValues = useMemo<number>(() => (
     Math.floor(answers.filter(item => item).length / (answers.length / 100))
   ), []);
@@ -120,10 +124,10 @@ export default function Result({
                     <Group spacing={20}>
                       {item.variants.map((variant, j) => {
                         const wrong = (
-                          (variant.option || variant.cyrillic) === (item.answered?.option || item.answered?.cyrillic)
+                          (variant[secondaryKey] || variant[mainKey]) === (item.answered?.[secondaryKey] || item.answered?.[mainKey])
                         );
                         const correct = (
-                          (variant.option || variant.cyrillic) === (item.correct.option || item.correct.cyrillic)
+                          (variant[secondaryKey] || variant[mainKey]) === (item.correct[secondaryKey] || item.correct[mainKey])
                         );
                         return (
                           <Radio
@@ -131,12 +135,12 @@ export default function Result({
                             color={wrong ? 'red' : 'green'}
                             checked={wrong || correct}
                             sx={() => ({
-                              textTransform: variant.option ? 'none' : 'capitalize',
+                              textTransform: variant[secondaryKey] ? 'none' : 'capitalize',
                               minWidth: 60,
                               opacity: !correct ? 0.5 : 1,
                             })}
-                            value={variant.option || variant.cyrillic}
-                            label={variant.option || variant.cyrillic}
+                            value={variant[secondaryKey] || variant[mainKey] || ''}
+                            label={variant[secondaryKey] || variant[mainKey]}
                           />
                         );
                       })}

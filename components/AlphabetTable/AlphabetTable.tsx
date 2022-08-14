@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import {
   DefaultProps,
   Center,
@@ -12,12 +12,17 @@ import {
 import { useElementSize } from '@mantine/hooks';
 import chunkGenerator from './chunkGenerator';
 import useStyles from './AlphabetTable.styles';
+import LocaleContext from '../LocaleContext';
+import { CharType } from '../../util/charType';
 
 export function AlphabetTable({
   className,
   label,
   ...others
 }: DefaultProps & { label: string }) {
+  const { locale } = useContext(LocaleContext);
+  const mainKey = useMemo<keyof CharType>(() => locale === 'ru' ? 'cyrillic' : 'latin', [locale])
+  const secondaryKey = useMemo<keyof CharType>(() => locale === 'ru' ? 'option' : 'latin_option', [locale])
   const { classes, cx } = useStyles();
   const { colorScheme } = useMantineColorScheme();
   const { ref, width } = useElementSize();
@@ -48,9 +53,9 @@ export function AlphabetTable({
                         <div className={classes.box}>
                           <Text
                             className={classes.char}
-                            style={{ textTransform: char.option ? 'none' : 'capitalize' }}
+                            style={{ textTransform: char[secondaryKey] ? 'none' : 'capitalize' }}
                           >
-                            {`${char.option || char.cyrillic}`}
+                            {`${char[secondaryKey] || char[mainKey]}`}
                           </Text>
                         </div>
                         <div className={classes.box}>

@@ -6,10 +6,6 @@ const nextConfig = {
   swcMinify: true,
   assetPrefix: !debug ? '/rat' : '/',
   basePath: !debug ? '/rat' : undefined,
-  i18n: {
-    locales: ['ru', 'en'],
-    defaultLocale: 'ru',
-  },
 }
 
 module.exports = nextConfig

@@ -4,14 +4,14 @@ import {
   DefaultProps,
   Radio,
 } from '@mantine/core';
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import shuffleArray from '../../util/shuffleChars';
 import CardsWrapper from '../CardsWrapper/CardsWrapper';
 import getAnswers from './getAnswers';
+import LocaleContext from '../LocaleContext';
 import { CharType } from '../../util/charType';
 import Result, { ResultsType } from './Result/Result';
 import { Breadcrumb } from '../Breadcrumbs/Breadcrumbs';
-import mockdata from '../../mockdata';
 
 interface TestPageProps extends DefaultProps {
   results: ResultsType,
@@ -19,7 +19,6 @@ interface TestPageProps extends DefaultProps {
   show_mistakes: string,
   breadcrumbs: Breadcrumb[],
   alphabet: string,
-  locale: keyof typeof mockdata;
 }
 
 export default function TestPage({
@@ -28,33 +27,44 @@ export default function TestPage({
   show_mistakes,
   breadcrumbs,
   alphabet,
-  locale,
   ...others
 }: TestPageProps) {
   const charArr = useMemo<CharType[]>(() => shuffleArray(), []);
+  const { locale } = useContext(LocaleContext);
+  const mainKey = useMemo<keyof CharType>(() => locale === 'ru' ? 'cyrillic' : 'latin', [locale])
+  const secondaryKey = useMemo<keyof CharType>(() => locale === 'ru' ? 'option' : 'latin_option', [locale])
   const variants = useMemo<CharType[][]>(() => charArr.map(char => getAnswers(char)), []);
   const [answers, setAnswers] = useState<(boolean | null)[]>(charArr.map(_ => null));
   const [answeredValues, setAnsweredValues] = useState<(CharType | null)[]>(charArr.map(_ => null));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showResult, setShowResult] = useState(false);
+  // console.log(locale);
 
   function updateAnswers(value: string) {
     const clone = [...answers];
-    clone[currentIndex] = value === ((charArr[currentIndex]?.option) || charArr[currentIndex].cyrillic);
+    clone[currentIndex] = value === ((charArr[currentIndex]?.[secondaryKey]) || charArr[currentIndex][mainKey]);
     const answeredClone = [...answeredValues];
     answeredClone[currentIndex] = variants[currentIndex]
-      .find(item => item.option ? value === item.option : value === item.cyrillic) as CharType;
+      .find(item => item[secondaryKey] ? value === item[secondaryKey] : value === item[mainKey]) as CharType;
     setAnsweredValues(answeredClone);
     setAnswers(clone);
   }
 
+  const cleanValues = () => {
+    setAnswers(charArr.map(_ => null));
+    setAnsweredValues(charArr.map(_ => null));
+    setCurrentIndex(0);
+  }
+
   useEffect(() => {
     return () => {
-      setAnswers(charArr.map(_ => null));
-      setAnsweredValues(charArr.map(_ => null));
-      setCurrentIndex(0)
-    }
-  }, [])
+      cleanValues();
+    };
+  }, []);
+
+  useEffect(() => {
+    cleanValues();
+  }, [locale])
 
   return showResult ? (
     <Result
@@ -75,17 +85,17 @@ export default function TestPage({
       {...others}
     >
       <Radio.Group
-        value={answeredValues[currentIndex]?.option || answeredValues[currentIndex]?.cyrillic || ''}
+        value={answeredValues[currentIndex]?.[secondaryKey] || answeredValues[currentIndex]?.[mainKey] || ''}
         onChange={(value) => updateAnswers(value)}
       >
         {variants[currentIndex].map((answer, index) => (
           <Radio
             sx={() => ({
-              textTransform: answer.option ? 'none' : 'capitalize',
+              textTransform: answer[secondaryKey] ? 'none' : 'capitalize',
             })}
             key={index}
-            value={answer.option || answer.cyrillic}
-            label={answer.option || answer.cyrillic}
+            value={answer[secondaryKey] || answer[mainKey] || ''}
+            label={answer[secondaryKey] || answer[mainKey]}
           />
         ))}
       </Radio.Group>

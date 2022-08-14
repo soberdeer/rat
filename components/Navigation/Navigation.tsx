@@ -14,15 +14,14 @@ import { Sun, Moon } from 'react-feather';
 import Link from 'next/link';
 import Logo from './Logo';
 import GithubIcon from './GithubIcon';
+import LocaleContext from '../LocaleContext';
 import mockdata from '../../mockdata';
 import useStyles from './Navigation.styles';
-import { useRouter } from 'next/router';
 
 interface NavigationProps extends DefaultProps {
   links: { href: string, label: string }[],
   changeTheme: string,
   changeLocale: string,
-  locale: keyof typeof mockdata,
   locales?: (keyof typeof mockdata)[],
 }
 
@@ -30,18 +29,10 @@ export function Navigation({
   links,
   changeTheme,
   changeLocale,
-  locale,
   locales,
 }: NavigationProps) {
-  const router = useRouter()
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const { classes } = useStyles();
-
-  const toggleLocale = (e: any) => {
-    const { pathname, asPath, query } = router;
-    document.cookie = `NEXT_LOCALE=${e.target.textContent}`
-    router.push({pathname, query}, asPath, { locale: e.target.textContent })
-  }
 
   return (
     <div className={classes.wrapper}>
@@ -68,33 +59,37 @@ export function Navigation({
           </Group>
         </Group>
         <Group spacing={'xs'}>
-          <Menu>
-            <Menu.Target>
-              <ActionIcon
-                variant="outline"
-                color="gray"
-                title={changeLocale}
-                sx={() => ({
-                  textTransform: 'capitalize',
-                })}
-              >
-                {locale}
-              </ActionIcon>
-            </Menu.Target>
-            <Menu.Dropdown>
-              {locales?.map((item, index) => (
-                <Menu.Item
-                  key={index}
-                  onClick={toggleLocale}
-                  sx={() => ({
-                    textTransform: 'capitalize',
-                  })}
-                >
-                    {item}
-                </Menu.Item>
-              ))}
-            </Menu.Dropdown>
-          </Menu>
+          <LocaleContext.Consumer>
+            {({ locale, setLocale }) => (
+              <Menu>
+                <Menu.Target>
+                  <ActionIcon
+                    variant="outline"
+                    color="gray"
+                    title={changeLocale}
+                    sx={() => ({
+                      textTransform: 'capitalize',
+                    })}
+                  >
+                    {locale}
+                  </ActionIcon>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  {locales?.map((item, index) => (
+                    <Menu.Item
+                      key={index}
+                      onClick={() => setLocale(item)}
+                      sx={() => ({
+                        textTransform: 'capitalize',
+                      })}
+                    >
+                      {item}
+                    </Menu.Item>
+                  ))}
+                </Menu.Dropdown>
+              </Menu>
+            )}
+          </LocaleContext.Consumer>
           <ActionIcon
             component={NextLink}
             href="https://github.com/soberdeer/rat"

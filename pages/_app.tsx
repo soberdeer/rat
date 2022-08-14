@@ -73,7 +73,7 @@ export default function App(props: AppProps) {
 
 
 App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
-  locale: ctx.req?.cookies.NEXT_LOCALE || 'ru',
+  locale: ctx.req?.cookies?.NEXT_LOCALE || 'ru',
   locales: ctx.locales || ['en', 'ru'],
   colorScheme: getCookie('mantine-color-scheme', ctx) || 'light',
 });

@@ -52,7 +52,7 @@ export function ReadPage({
       <Breadcrumbs breadcrumbs={breadcrumbs} />
       <Text align="center" pb={40}>{hero}</Text>
       <AlphabetTable label={alphabet} />
-      <Stack spacing={40}>
+      <Stack spacing={40} py={40}>
         <Box>
           <Textarea
             placeholder={textarea_placeholder}

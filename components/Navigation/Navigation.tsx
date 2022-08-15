@@ -7,19 +7,25 @@ import {
   useMantineColorScheme,
   Title,
   Menu,
+  Text,
   UnstyledButton,
 } from '@mantine/core';
 import { NextLink } from '@mantine/next';
-import { Sun, Moon } from 'react-feather';
-import Link from 'next/link';
+import { Sun, Moon, Copy, BookOpen, FileText } from 'react-feather';
 import Logo from './Logo';
 import GithubIcon from './GithubIcon';
 import LocaleContext from '../LocaleContext';
 import mockdata from '../../mockdata';
 import useStyles from './Navigation.styles';
 
+const iconsMap = {
+  copy: Copy,
+  book: BookOpen,
+  file: FileText,
+};
+
 interface NavigationProps extends DefaultProps {
-  links: { href: string, label: string }[],
+  links: typeof mockdata.en.navigation.links,
   changeTheme: string,
   changeLocale: string,
   locales?: (keyof typeof mockdata)[],
@@ -45,17 +51,25 @@ export function Navigation({
             </Group>
           </UnstyledButton>
           <Group spacing="md" align="center">
-            {links.map((link, index) => (
-              <Link href={link.href} passHref key={index}>
+            {links.map((link, index) => {
+              const Icon = iconsMap[link.icon as keyof typeof iconsMap] || null;
+              return (
                 <Button
-                  component="a"
+                  component={NextLink}
+                  href={link.href}
+                  key={index}
                   color={colorScheme === 'dark' ? 'gray' : 'orange'}
                   variant="light"
+                  leftIcon={Icon ? <Icon size={15} /> : null}
+                  classNames={{
+                    root: classes.buttonRoot,
+                    leftIcon: classes.leftIcon,
+                  }}
                 >
-                  {link.label}
+                  <Text className={classes.buttonLabel}>{link.label}</Text>
                 </Button>
-              </Link>
-            ))}
+              );
+            })}
           </Group>
         </Group>
         <Group spacing={'xs'}>

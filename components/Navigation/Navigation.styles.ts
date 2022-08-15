@@ -25,5 +25,23 @@ export default createStyles((theme) => ({
       // Type safe child reference in nested selectors via ref
       display: 'none',
     },
+  },
+
+  buttonLabel: {
+    [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+      display: 'none',
+    }
+  },
+
+  leftIcon: {
+    [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+      marginRight: 0,
+    }
+  },
+
+  buttonRoot: {
+    [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+      paddingRight: 12,
+    }
   }
 }));

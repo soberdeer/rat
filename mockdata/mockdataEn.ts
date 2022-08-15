@@ -6,14 +6,17 @@ const mockdataEn = {
       {
         href: '/cards',
         label: 'Cards',
+        icon: 'copy'
       },
       {
         href: '/test',
         label: 'Test',
+        icon: 'file',
       },
       {
         href: '/reading',
         label: 'Reading',
+        icon: 'book',
       },
     ],
     changeTheme: 'Change theme',
